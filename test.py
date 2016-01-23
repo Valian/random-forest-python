@@ -3,6 +3,7 @@ from decision_tree import DecisionTreeCreator, RandomForestCreator
 from id3 import *
 import sys
 import os.path
+from data import DataReader, DataSet
 
 def get_filenames():
     """
@@ -74,15 +75,17 @@ def get_data(filename, attributes):
 if __name__ == "__main__":
     # Get the training and test data filenames from the user
     training_filename, test_filename = 'data', 'test_data'
-
-    # Extract the attribute names and the target attribute from the training
-    # data file.
-    attributes = get_attributes(training_filename)
-    target_attr = attributes[-1]
-
+    #training_filename, test_filename = 'wines.csv', 'wines_test.csv'
     # Get the training and test data from the given files
-    training_data = get_data(training_filename, attributes)
-    test_data = get_data(test_filename, attributes)
+    reader = DataReader()
+    #reader = DataReader(';')
+    training_data_set = reader.read_csv(training_filename)
+    training_data = training_data_set.data
+    test_data_set = reader.read_csv(test_filename)
+    test_data = test_data_set.data
+
+    attributes = training_data_set.attributes
+    target_attr = attributes[-1]
     
     # Create the decision tree
     tree_creator = DecisionTreeCreator(gain, max_depth=3)
