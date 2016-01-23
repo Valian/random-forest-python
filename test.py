@@ -74,11 +74,11 @@ def get_data(filename, attributes):
 
 if __name__ == "__main__":
     # Get the training and test data filenames from the user
-    training_filename, test_filename = 'data', 'test_data'
-    #training_filename, test_filename = 'wines.csv', 'wines_test.csv'
+    #training_filename, test_filename = 'data', 'test_data'
+    training_filename, test_filename = 'wines.csv', 'wines_test.csv'
     # Get the training and test data from the given files
+    #reader = DataReader(',')
     reader = DataReader()
-    #reader = DataReader(';')
     training_data_set = reader.read_csv(training_filename)
     training_data = training_data_set.data
     test_data_set = reader.read_csv(test_filename)

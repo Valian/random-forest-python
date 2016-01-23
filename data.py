@@ -2,7 +2,7 @@ import csv
 
 
 class DataReader(object):
-    def __init__(self, delimiter=','):
+    def __init__(self, delimiter=';'):
         self.delimiter = delimiter
 
     def read_csv(self, filename):
