@@ -24,10 +24,10 @@ def get_file_names():
 
 
 if __name__ == "__main__":
-    data_filename = 'data'
-    reader = DataReader(',')
+    data_filename = 'sample_data/basic_data_binary.csv'
+    reader = DataReader()
     data_set = reader.read_csv(data_filename)
-    validator = CrossValidation(4, True)
+    validator = CrossValidation(10, True)
     accuracy = validator.validate(data_set)
 
     print "------------------------\n"
