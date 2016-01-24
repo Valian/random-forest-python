@@ -1,6 +1,4 @@
 import csv
-from decision_tree import DecisionTreeCreator, RandomForestCreator
-from id3 import *
 
 
 class DataReader(object):
@@ -26,14 +24,13 @@ class DataReader(object):
 
 
 class CrossValidation(object):
-    def __init__(self, folds, verbose=False):
+    def __init__(self, random_forest_creator, folds, verbose=False):
+        self.random_forest_creator = random_forest_creator
         self.folds = folds
         self.verbose = verbose
 
-    def train(self, training_set, attributes, target_attr, depth=3, no_of_trees=10):
-        tree_creator = DecisionTreeCreator(gain, max_depth=depth)
-        forest_creator = RandomForestCreator(tree_creator)
-        forest = forest_creator.create_random_forest(no_of_trees, training_set, attributes, target_attr)
+    def train(self, training_set, attributes, target_attr):
+        forest = self.random_forest_creator.create_random_forest(training_set, attributes, target_attr)
         if self.verbose:
             print forest
         return forest

@@ -5,14 +5,15 @@ from utils import sample_with_replacement
 
 class RandomForestCreator(object):
 
-    def __init__(self, tree_creator, with_replacement=True, sample_size=0.6):
+    def __init__(self, tree_creator, num_of_trees=10, with_replacement=True, sample_size=0.6):
+        self.num_of_trees = num_of_trees
         self.sample_size = sample_size
         self.with_replacement = with_replacement
         self.tree_creator = tree_creator
 
-    def create_random_forest(self, nr_of_trees, data, attributes, target_attr):
+    def create_random_forest(self, data, attributes, target_attr):
         forest = RandomForest()
-        for i in xrange(nr_of_trees):
+        for i in xrange(self.num_of_trees):
             sample_data = sample_with_replacement(data, int(len(data) * self.sample_size + 1), self.with_replacement)
             tree = self.tree_creator.create_decision_tree(sample_data, attributes, target_attr)
             forest.add_tree(tree)

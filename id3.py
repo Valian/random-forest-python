@@ -15,7 +15,7 @@ def entropy(data, target_attr):
 
     # Calculate the frequency of each of the values in the target attr
     for record in data:
-        if (val_freq.has_key(record[target_attr])):
+        if record[target_attr] in val_freq:
             val_freq[record[target_attr]] += 1.0
         else:
             val_freq[record[target_attr]] = 1.0
@@ -37,7 +37,7 @@ def gain(data, attr, target_attr):
 
     # Calculate the frequency of each of the values in the target attribute
     for record in data:
-        if (val_freq.has_key(record[attr])):
+        if val_freq.has_key(record[attr]):
             val_freq[record[attr]] += 1.0
         else:
             val_freq[record[attr]] = 1.0
@@ -51,5 +51,5 @@ def gain(data, attr, target_attr):
 
     # Subtract the entropy of the chosen attribute from the entropy of the
     # whole data set with respect to the target attribute (and return it)
-    return (entropy(data, target_attr) - subset_entropy)
-            
+    return entropy(data, target_attr) - subset_entropy
+
