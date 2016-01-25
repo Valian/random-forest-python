@@ -1,8 +1,8 @@
-from __future__ import with_statement
 import argparse
-from data import DataReader, CrossValidation
-from decision_tree import DecisionTreeCreator, RandomForestCreator
-from id3 import gain
+
+from data import DataReader
+from core import CrossValidation, DecisionTreeCreator, RandomForestCreator
+from entropy import gain
 
 
 def parse_args():
