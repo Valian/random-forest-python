@@ -18,33 +18,33 @@ class DataReader(object):
                 else:
                     data.append(self.line_to_data_row(attributes, row))
             return DataSet(attributes, data)
-
-    def line_to_data_row(self, attributes, line):
+        
+    @staticmethod
+    def line_to_data_row(attributes, line):
         return dict(zip(attributes, [datum.strip() for datum in line]))
 
 
 class CrossValidation(object):
-    def __init__(self, random_forest_creator, folds, verbose=False):
+    def __init__(self, random_forest_creator, folds, verbosity_level=0):
         self.random_forest_creator = random_forest_creator
         self.folds = folds
-        self.verbose = verbose
+        self.verbosity_level = verbosity_level
 
     def train(self, training_set, attributes, target_attr):
         forest = self.random_forest_creator.create_random_forest(training_set, attributes, target_attr)
-        if self.verbose:
+        if self.verbosity_level >= 3:
             print forest
         return forest
 
     def test(self, test_set, target_attr, forest):
         classification = forest.classify_many(test_set)
-        valid = 0
-        i = 0
-        for res in classification:
-            if self.verbose:
-                print res + ' ?? ' + test_set[i][target_attr]
-            valid += 1 if test_set[i][target_attr] == res else 0
-            i += 1
-        return valid / float(len(test_set))
+        valid_counter = 0
+        for i, res in enumerate(classification):
+            expected = test_set[i][target_attr]
+            valid_counter += int(expected == res)
+            if self.verbosity_level >= 2:
+                print 'result: {0:10}, expected {1:10} - {2}'.format(res, expected, expected == res)
+        return valid_counter / float(len(test_set))
 
     def validate(self, data_set):
         subset_size = len(data_set.data) / self.folds
@@ -54,8 +54,8 @@ class CrossValidation(object):
             training_this_round = data_set.data[:i * subset_size] + data_set.data[(i + 1) * subset_size:]
             forest = self.train(training_this_round, data_set.attributes, data_set.target_attr)
             results.append(self.test(testing_this_round, data_set.target_attr, forest))
-            if self.verbose:
-                print 'Result for fold no {}: {}'.format(i, results[-1])
+            if self.verbosity_level >= 1:
+                print 'Accuracy for fold no {0}: {1}'.format(i + 1, results[-1])
 
         return sum(results) / self.folds
 
