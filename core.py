@@ -102,7 +102,7 @@ class DecisionTreeNode(object):
         :type node: DecisionTreeNode
         :type attr_value: Any
         """
-        assert node.value not in self._children, "Already in subtree"
+        assert node.value not in self._children, "Value {0} already in subtree".format(node.value)
         self._children[attr_value] = node
 
     def is_leaf(self):
