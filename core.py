@@ -88,7 +88,6 @@ class DecisionTreeCreator(object):
         return tree
 
 
-
 class DecisionTreeNode(object):
 
     def __init__(self, attr_name, default=None, value=None):
@@ -102,7 +101,7 @@ class DecisionTreeNode(object):
         :type node: DecisionTreeNode
         :type attr_value: Any
         """
-        assert node.value not in self._children, "Value {0} already in subtree".format(node.value)
+        assert attr_value not in self._children, "Value {0} already in subtree".format(node.value)
         self._children[attr_value] = node
 
     def is_leaf(self):

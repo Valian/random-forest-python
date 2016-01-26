@@ -17,11 +17,13 @@ def parse_args():
     parser.add_argument('--folds', '-f', dest='folds', default=4, type=int, help='cross validation folds')
     parser.add_argument('--verbosity', '-v', dest='verbosity', default=0, type=int, choices=[0, 1, 2, 3],
                         help='detailed output')
+    parser.add_argument('--discretization', '-c', dest='discretization', default=None, type=int,
+                        help='amount of values to perform discretization')
     return parser.parse_args()
 
 
-def test(filename, depth, trees, replacement, sample, folds, verbosity):
-    reader = DataReader()
+def test(filename, depth, trees, replacement, sample, folds, verbosity, discretization):
+    reader = DataReader(discretization_level=discretization)
     data_set = reader.read_csv(filename)
     tree_creator = DecisionTreeCreator(gain, max_depth=depth)
     forest_creator = RandomForestCreator(tree_creator, trees, with_replacement=replacement, sample_size=sample)

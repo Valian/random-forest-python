@@ -4,7 +4,8 @@ import collections
 
 
 class DataReader(object):
-    def __init__(self, delimiter=';'):
+    def __init__(self, delimiter=';', discretization_level=None):
+        self.discretization_level = discretization_level
         self.delimiter = delimiter
 
     def read_csv(self, filename):
@@ -19,11 +20,31 @@ class DataReader(object):
                     first_row = False
                 else:
                     data.append(self.line_to_data_row(attributes, row))
-            return DataSet(attributes, data)
+            data_set = DataSet(attributes, data)
+            if self.discretization_level is not None:
+                data_set = self.discretize(data_set)
+            return data_set
 
     @staticmethod
     def line_to_data_row(attributes, line):
         return dict(zip(attributes, [datum.strip() for datum in line]))
+
+    def discretize(self, data_set):
+        """
+        :type data_set: DataSet
+        :rtype: DataSet
+        """
+        for attr in data_set.attributes:
+            if attr == data_set.target_attr:
+                continue
+            try:
+                values = [float(record[attr]) for record in data_set.data]
+                min_value, max_value = min(values), max(values)
+                for i, val in enumerate(values):
+                    data_set.data[i][attr] = int((val - min_value) * 1.0 / (max_value - min_value) * self.discretization_level)
+            except ValueError:
+                continue
+        return data_set
 
 
 class DataSet(object):
